@@ -224,6 +224,12 @@ public:
         });
     }
 
+    void operator=(lua_Integer i) const {
+        _evaluate_store([this, i]() {
+            detail::_push(_state, i);
+        });
+    }
+
     void operator=(const std::string &s) const {
         _evaluate_store([this, s]() {
             detail::_push(_state, s);
@@ -343,6 +349,12 @@ public:
         ResetStackOnScopeExit save(_state);
         _evaluate_retrieve(1);
         return detail::_pop(detail::_id<lua_Number>{}, _state);
+    }
+
+    operator lua_Integer() const {
+        ResetStackOnScopeExit save(_state);
+        _evaluate_retrieve(1);
+        return detail::_pop(detail::_id<lua_Integer>{}, _state);
     }
 
     operator std::string() const {

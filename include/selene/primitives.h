@@ -41,6 +41,10 @@ struct is_primitive<lua_Number> {
     static constexpr bool value = true;
 };
 template <>
+struct is_primitive<lua_Integer> {
+    static constexpr bool value = true;
+};
+template <>
 struct is_primitive<std::string> {
     static constexpr bool value = true;
 };
@@ -104,6 +108,10 @@ inline unsigned int _get(_id<unsigned int>, lua_State *l, const int index) {
 
 inline lua_Number _get(_id<lua_Number>, lua_State *l, const int index) {
     return lua_tonumber(l, index);
+}
+
+inline lua_Integer _get(_id<lua_Integer>, lua_State *l, const int index) {
+    return lua_tointeger(l, index);
 }
 
 inline std::string _get(_id<std::string>, lua_State *l, const int index) {
@@ -210,6 +218,18 @@ inline lua_Number _check_get(_id<lua_Number>, lua_State *l, const int index) {
     if(!isNum){
         throw GetParameterFromLuaTypeError{
             [](lua_State *l, int index){luaL_checknumber(l, index);},
+            index
+        };
+    }
+    return res;
+}
+
+inline lua_Integer _check_get(_id<lua_Integer>, lua_State *l, const int index) {
+    int isNum = 0;
+    auto res = lua_tointegerx(l, index, &isNum);
+    if (!isNum) {
+        throw GetParameterFromLuaTypeError{
+            [](lua_State *l, int index) {luaL_checkinteger(l, index); },
             index
         };
     }
@@ -337,6 +357,10 @@ inline void _push(lua_State *l, unsigned int u) {
 
 inline void _push(lua_State *l, lua_Number f) {
     lua_pushnumber(l, f);
+}
+
+inline void _push(lua_State *l, lua_Integer i) {
+    lua_pushinteger(l, i);
 }
 
 inline void _push(lua_State *l, const std::string &s) {

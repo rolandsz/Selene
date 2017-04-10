@@ -1,6 +1,6 @@
 # Selene
 
-[![Build Status](https://travis-ci.org/jeremyong/Selene.svg?branch=master)](https://travis-ci.org/jeremyong/Selene)
+[![Build Status](https://travis-ci.org/rolandsz/Selene.svg?branch=master)](https://travis-ci.org/rolandsz/Selene)
 
 Simple C++11 friendly header-only bindings to Lua 5.1+.
 
